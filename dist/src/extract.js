@@ -55,8 +55,9 @@ function getCommitFromPullRequestPayload(pr) {
     };
 }
 async function getCommitFromGitHubAPIRequest(githubToken, ref) {
-    const octocat = new github.GitHub(githubToken);
-    const { status, data } = await octocat.repos.getCommit({
+    var _a, _b, _c, _d, _e, _f, _g, _h, _j;
+    const octocat = github.getOctokit(githubToken);
+    const { status, data } = await octocat.rest.repos.getCommit({
         owner: github.context.repo.owner,
         repo: github.context.repo.repo,
         ref: ref !== null && ref !== void 0 ? ref : github.context.ref,
@@ -67,18 +68,18 @@ async function getCommitFromGitHubAPIRequest(githubToken, ref) {
     const { commit } = data;
     return {
         author: {
-            name: commit.author.name,
-            username: data.author.login,
-            email: commit.author.email,
+            name: (_a = commit.author) === null || _a === void 0 ? void 0 : _a.name,
+            username: (_b = data.author) === null || _b === void 0 ? void 0 : _b.login,
+            email: (_c = commit.author) === null || _c === void 0 ? void 0 : _c.email,
         },
         committer: {
-            name: commit.committer.name,
-            username: data.committer.login,
-            email: commit.committer.email,
+            name: (_d = commit.committer) === null || _d === void 0 ? void 0 : _d.name,
+            username: (_e = data.committer) === null || _e === void 0 ? void 0 : _e.login,
+            email: (_f = commit.committer) === null || _f === void 0 ? void 0 : _f.email,
         },
         id: data.sha,
         message: commit.message,
-        timestamp: commit.author.date,
+        timestamp: (_h = (_g = commit.author) === null || _g === void 0 ? void 0 : _g.date) !== null && _h !== void 0 ? _h : (_j = commit.committer) === null || _j === void 0 ? void 0 : _j.date,
         url: data.html_url,
     };
 }
