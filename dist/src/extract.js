@@ -22,6 +22,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.extractResult = void 0;
 /* eslint-disable @typescript-eslint/naming-convention */
 const fs_1 = require("fs");
+const core = __importStar(require("@actions/core"));
 const github = __importStar(require("@actions/github"));
 function getHumanReadableUnitValue(seconds) {
     if (seconds < 1.0e-6) {
@@ -56,16 +57,20 @@ function getCommitFromPullRequestPayload(pr) {
 }
 async function getCommitFromGitHubAPIRequest(githubToken, ref) {
     var _a, _b, _c, _d, _e, _f, _g, _h, _j;
+    core.debug(`getCommitFromGitHubAPIRequest`);
     const octocat = github.getOctokit(githubToken);
+    core.debug(`getOctokit`);
     const { status, data } = await octocat.rest.repos.getCommit({
         owner: github.context.repo.owner,
         repo: github.context.repo.repo,
         ref: ref !== null && ref !== void 0 ? ref : github.context.ref,
     });
+    core.debug(`getCommit ${status}`);
     if (!(status === 200 || status === 304)) {
         throw new Error(`Could not fetch the head commit. Received code: ${status}`);
     }
     const { commit } = data;
+    core.debug(`cp commit`);
     return {
         author: {
             name: (_a = commit.author) === null || _a === void 0 ? void 0 : _a.name,
