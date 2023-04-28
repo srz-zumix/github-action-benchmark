@@ -63,7 +63,7 @@ async function getCommitFromGitHubAPIRequest(githubToken, ref) {
     const { status, data } = await octocat.rest.repos.getCommit({
         owner: github.context.repo.owner,
         repo: github.context.repo.repo,
-        ref: ref !== null && ref !== void 0 ? ref : github.context.ref,
+        ref: ref !== null && ref !== void 0 ? ref : github.context.sha,
     });
     core.debug(`getCommit ${status}`);
     if (!(status === 200 || status === 304)) {
