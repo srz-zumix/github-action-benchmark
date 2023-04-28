@@ -60,6 +60,7 @@ async function getCommitFromGitHubAPIRequest(githubToken, ref) {
     core.debug(`getCommitFromGitHubAPIRequest`);
     const octocat = github.getOctokit(githubToken);
     core.debug(`getOctokit`);
+    core.debug(`getCommit ${github.context.repo.owner} ${github.context.repo.repo} ${ref !== null && ref !== void 0 ? ref : github.context.sha}`);
     const { status, data } = await octocat.rest.repos.getCommit({
         owner: github.context.repo.owner,
         repo: github.context.repo.repo,
